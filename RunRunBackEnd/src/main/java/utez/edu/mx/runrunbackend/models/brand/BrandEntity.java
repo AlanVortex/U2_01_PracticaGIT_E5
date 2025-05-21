@@ -1,5 +1,6 @@
 package utez.edu.mx.runrunbackend.models.brand;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import utez.edu.mx.runrunbackend.models.car.CarEntity;
 
@@ -12,7 +13,7 @@ public class BrandEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-
+    @JsonIgnore
     @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private List<CarEntity> carEntityList;
 
