@@ -5,4 +5,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface BrandRepository extends JpaRepository<BrandEntity,Long> {
+    BrandEntity findById(long id);
 }
