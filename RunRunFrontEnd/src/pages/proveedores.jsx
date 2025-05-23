@@ -217,41 +217,44 @@ function Proveedores() {
           />
         </div>
 
-        {/* Tabla */}
-        <div className="overflow-x-auto">
-          <table className="min-w-full text-sm text-gray-800 border-separate border-spacing-y-2">
+        {/* Tabla mejorada */}
+        <div className="overflow-x-auto mt-6">
+          <table className="min-w-full text-sm text-gray-800">
             <thead>
-              <tr className="bg-gray-100 text-gray-600">
-                <th className="text-left px-6 py-3 rounded-l-lg">Nombre</th>
-                <th className="text-left px-6 py-3">Apellido</th>
-                <th className="text-left px-6 py-3">Correo</th>
-                <th className="text-left px-6 py-3">Teléfono</th>
-                <th className="text-center px-6 py-3 rounded-r-lg">Acciones</th>
+              <tr className="bg-blue-50 text-gray-600 text-left">
+                <th className="px-6 py-3 rounded-tl-lg">Nombre</th>
+                <th className="px-6 py-3">Apellido</th>
+                <th className="px-6 py-3">Correo</th>
+                <th className="px-6 py-3">Teléfono</th>
+                <th className="px-6 py-3 text-center rounded-tr-lg">Acciones</th>
               </tr>
             </thead>
             <tbody>
-              {proveedores.map((prov) => (
-                <tr key={prov.id} className="bg-white shadow rounded-lg">
-                  <td className="px-6 py-4 font-semibold">{prov.name}</td>
+              {proveedores.map((prov, idx) => (
+                <tr
+                  key={prov.id}
+                  className="bg-white hover:shadow-md hover:bg-blue-50 transition rounded-lg"
+                >
+                  <td className="px-6 py-4 font-semibold rounded-l-lg">{prov.name}</td>
                   <td className="px-6 py-4">{prov.lastname}</td>
                   <td className="px-6 py-4">{prov.email}</td>
                   <td className="px-6 py-4">{prov.phone}</td>
-                  <td className="px-6 py-4 text-center space-x-2">
+                  <td className="px-6 py-4 text-center space-x-2 rounded-r-lg">
                     <Link
                       to={`/proveedores/${prov.id}`}
-                      className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1 rounded shadow transition"
+                      className="inline-block bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1 rounded shadow transition"
                     >
                       Ver
                     </Link>
                     <button
                       onClick={() => abrirModalEdicion(prov)}
-                      className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-1 rounded shadow transition"
+                      className="inline-block bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-1 rounded shadow transition"
                     >
                       Editar
                     </button>
                     <button
                       onClick={() => handleDelete(prov.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded shadow transition"
+                      className="inline-block bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded shadow transition"
                     >
                       Borrar
                     </button>
@@ -261,6 +264,7 @@ function Proveedores() {
             </tbody>
           </table>
         </div>
+
 
       </div>
 

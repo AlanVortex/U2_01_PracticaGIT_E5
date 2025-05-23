@@ -207,7 +207,11 @@ export default function Autos() {
         {/* Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => (
-            <div key={car.id} className="bg-white rounded-2xl shadow p-6 flex flex-col justify-between">
+            <div
+              key={car.id}
+              className="bg-white rounded-2xl shadow p-6 flex flex-col justify-between transition-transform duration-300 transform hover:-translate-y-1 hover:shadow-lg"
+            >
+
               <div>
                 <h3 className="font-bold text-gray-800">Marca: {car.brand}</h3>
                 <p>Modelo: {car.model}</p>
@@ -218,16 +222,29 @@ export default function Autos() {
                 </p>
               </div>
               <div className="flex justify-end space-x-4 text-xl mt-4">
-                <Link to={`/automoviles/${car.id}`} title="Ver detalles" className="text-blue-600">
+                <Link
+                  to={`/automoviles/${car.id}`}
+                  title="Ver detalles"
+                  className="text-blue-600 hover:text-blue-800 transition duration-200"
+                >
                   <FaEye />
                 </Link>
-                <button onClick={() => openEditModal(car)} title="Editar" className="text-yellow-600">
+                <button
+                  onClick={() => openEditModal(car)}
+                  title="Editar"
+                  className="text-yellow-600 hover:text-yellow-800 transition duration-200"
+                >
                   <FaEdit />
                 </button>
-                <button onClick={() => handleDelete(car.id)} title="Eliminar" className="text-red-600">
+                <button
+                  onClick={() => handleDelete(car.id)}
+                  title="Eliminar"
+                  className="text-red-600 hover:text-red-800 transition duration-200"
+                >
                   <FaTrash />
                 </button>
               </div>
+
             </div>
           ))}
         </div>
