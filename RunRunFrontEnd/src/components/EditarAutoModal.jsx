@@ -3,11 +3,17 @@ import React from "react";
 export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSave, proveedores }) {
   if (!isOpen || !auto) return null;
 
-  const camposCompletos =
-    auto.brand?.trim() &&
-    auto.model?.trim() &&
-    auto.color?.trim() &&
-    auto.plate?.trim() &&
+  // Regex
+  const brandRegex = /^[A-Za-z\s\-]+$/;
+  const modelRegex = /^[A-Za-z0-9\s\-]+$/;
+  const colorRegex = /^[A-Za-z\s]+$/;
+  const plateRegex = /^[A-Z0-9\-]+$/;
+
+  const camposValidos =
+    brandRegex.test(auto.brand?.trim() || "") &&
+    modelRegex.test(auto.model?.trim() || "") &&
+    colorRegex.test(auto.color?.trim() || "") &&
+    plateRegex.test(auto.plate?.trim() || "") &&
     auto.providerId;
 
   return (
@@ -44,9 +50,9 @@ export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSav
             type="text"
             name="plate"
             value={auto.plate}
-            onChange={(e) => onChange({ ...auto, plate: e.target.value })}
+            onChange={(e) => onChange({ ...auto, plate: e.target.value.toUpperCase() })}
             placeholder="Placa"
-            className="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+            className="w-full px-4 py-2 rounded-lg border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none uppercase"
           />
           <select
             name="providerId"
@@ -72,9 +78,9 @@ export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSav
           </button>
           <button
             onClick={onSave}
-            disabled={!camposCompletos}
+            disabled={!camposValidos}
             className={`px-5 py-2 rounded-lg font-medium text-white transition ${
-              camposCompletos
+              camposValidos
                 ? "bg-blue-600 hover:bg-blue-700"
                 : "bg-blue-300 cursor-not-allowed"
             }`}

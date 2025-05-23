@@ -38,9 +38,35 @@ export default function Autos() {
 
   const handleCreate = async () => {
     const { brand, model, color, plate, providerId } = form;
+
+    // Expresiones regulares
+    const brandRegex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s\-]+$/;      // Ahora acepta tildes y ñ
+    const modelRegex = /^[A-Za-z0-9\s\-]+$/;                 // OK para letras/números
+    const colorRegex = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ\s]+$/;        // También acepta tildes y ñ
+    const plateRegex = /^[A-Z]{3}-\d{3}-[A-Z]$/;             // Mayúsculas + dígitos
+
+
+    // Validaciones
     if (!brand || !model || !color || !plate || !providerId) {
       return Swal.fire("Faltan datos", "Completa todos los campos", "warning");
     }
+
+    if (!brandRegex.test(brand)) {
+      return Swal.fire("Error", "Marca inválida (solo letras, espacios o guiones)", "error");
+    }
+    if (!modelRegex.test(model)) {
+      return Swal.fire("Error", "Modelo inválido (letras, números, espacios o guiones)", "error");
+    }
+    if (!colorRegex.test(color)) {
+      return Swal.fire("Error", "Color inválido (solo letras y espacios)", "error");
+    }
+    if (!plateRegex.test(plate)) {
+      return Swal.fire("Error", "Placa inválida (solo mayúsculas, números y guiones)", "error");
+    }
+    if (cars.some((c) => c.plate.toUpperCase() === plate.toUpperCase())) {
+      return Swal.fire("Error", "Ya existe un auto con esa placa", "error");
+    }
+
 
     const confirm = await Swal.fire({
       title: "¿Estás seguro?",
@@ -148,16 +174,23 @@ export default function Autos() {
         </div>
 
         <div className="mb-6 grid grid-cols-1 md:grid-cols-5 gap-4">
-          {["Marca", "Modelo", "Color", "Placa"].map((field) => (
+          {[
+            { name: "brand", placeholder: "Marca" },
+            { name: "model", placeholder: "Modelo" },
+            { name: "color", placeholder: "Color" },
+            { name: "plate", placeholder: "Placa (ej. RDV-345-B)" }, // ✅ actualizado
+          ].map(({ name, placeholder }) => (
             <input
-              key={field}
-              name={field}
-              value={form[field]}
+              key={name}
+              name={name}
+              value={form[name]}
               onChange={handleInputChange}
-              placeholder={field.charAt(0).toUpperCase() + field.slice(1)}
+              placeholder={placeholder}
               className="p-2 border border-gray-300 shadow-sm focus:ring-2 rounded focus:ring-blue-500 focus:outline-none"
             />
           ))}
+
+
           <select
             name="providerId"
             value={form.providerId}
@@ -184,17 +217,16 @@ export default function Autos() {
                   Proveedor: {car.proveedor?.name}
                 </p>
               </div>
-              <div className="flex justify-end space-x-4 text-xl mt-4 text-blue-600">
-                <button onClick={() => openEditModal(car)} title="Editar">
-                  <FaEdit />
-                </button>
-                <button onClick={() => handleDelete(car.id)} title="Eliminar">
-                  <FaTrash />
-                </button>
-                <Link to={`/automoviles/${car.id}`} title="Ver detalles">
+              <div className="flex justify-end space-x-4 text-xl mt-4">
+                <Link to={`/automoviles/${car.id}`} title="Ver detalles" className="text-blue-600">
                   <FaEye />
                 </Link>
-
+                <button onClick={() => openEditModal(car)} title="Editar" className="text-yellow-600">
+                  <FaEdit />
+                </button>
+                <button onClick={() => handleDelete(car.id)} title="Eliminar" className="text-red-600">
+                  <FaTrash />
+                </button>
               </div>
             </div>
           ))}

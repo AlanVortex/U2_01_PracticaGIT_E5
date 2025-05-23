@@ -3,11 +3,16 @@ import React from "react";
 function EditarProveedorModal({ isOpen, onClose, proveedor, onChange, onSave }) {
   if (!isOpen) return null;
 
-  const camposCompletos =
-    proveedor.name?.trim() &&
-    proveedor.lastname?.trim() &&
-    proveedor.email?.trim() &&
-    proveedor.phone?.trim();
+  // Regex
+  const nameRegex = /^[A-Za-zÁÉÍÓÚáéíóúñÑ\s]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const phoneRegex = /^[0-9]{7,15}$/;
+
+  const camposValidos =
+    nameRegex.test(proveedor.name?.trim() || "") &&
+    nameRegex.test(proveedor.lastname?.trim() || "") &&
+    emailRegex.test(proveedor.email?.trim() || "") &&
+    phoneRegex.test(proveedor.phone?.trim() || "");
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-30 backdrop-blur-sm flex items-center justify-center z-50">
@@ -60,9 +65,9 @@ function EditarProveedorModal({ isOpen, onClose, proveedor, onChange, onSave }) 
           </button>
           <button
             onClick={onSave}
-            disabled={!camposCompletos}
+            disabled={!camposValidos}
             className={`px-5 py-2 rounded-lg font-medium text-white transition ${
-              camposCompletos
+              camposValidos
                 ? "bg-blue-600 hover:bg-blue-700"
                 : "bg-blue-300 cursor-not-allowed"
             }`}
