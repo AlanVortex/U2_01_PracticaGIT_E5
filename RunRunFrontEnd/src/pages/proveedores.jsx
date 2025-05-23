@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Swal from "sweetalert2";
 import { Link } from "react-router-dom";
 import EditarProveedorModal from "../components/EditarProveedorModal";
 
@@ -34,22 +35,22 @@ function Proveedores() {
     const telefonoRegex = /^\d{10}$/;
 
     if (!name.trim() || !lastname.trim() || !email.trim() || !phone.trim()) {
-      alert("Todos los campos son obligatorios.");
+      Swal.fire("Error", "Todos los campos son obligatorios.", "error");
       return;
     }
 
     if (!nombreRegex.test(name) || !nombreRegex.test(lastname)) {
-      alert("Nombre y apellido solo deben contener letras.");
+      Swal.fire("Error", "Nombre y apellido solo deben contener letras.", "error");
       return;
     }
 
     if (!correoRegex.test(email)) {
-      alert("Correo electrónico no válido.");
+      Swal.fire("Error", "Correo electrónico no válido.", "error");
       return;
     }
 
     if (!telefonoRegex.test(phone)) {
-      alert("El teléfono debe contener exactamente 10 dígitos.");
+      Swal.fire("Error", "El teléfono debe contener exactamente 10 dígitos.", "error");
       return;
     }
 
@@ -61,46 +62,68 @@ function Proveedores() {
     );
 
     if (duplicado) {
-      alert("Ya existe un proveedor con ese nombre, apellido y correo.");
+      Swal.fire("Error", "Ya existe un proveedor con ese nombre, apellido y correo.", "error");
       return;
     }
 
-    fetch("http://localhost:8092/api/proveedor", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(nuevoProveedor),
-    })
-      .then((res) => {
-        if (res.ok) {
-          setNuevoProveedor({ name: "", lastname: "", email: "", phone: "" });
-          getProveedores();
-        }
-      })
-      .catch((err) => console.error("Error al crear proveedor:", err));
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Vas a crear este proveedor.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, crear",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch("http://localhost:8092/api/proveedor", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(nuevoProveedor),
+        })
+          .then((res) => {
+            if (res.ok) {
+              Swal.fire("¡Creado!", "Proveedor creado correctamente.", "success");
+              setNuevoProveedor({ name: "", lastname: "", email: "", phone: "" });
+              getProveedores();
+            } else {
+              Swal.fire("Error", "No se pudo crear el proveedor.", "error");
+            }
+          })
+          .catch(() => Swal.fire("Error", "Error al conectar con el servidor.", "error"));
+      }
+    });
   };
 
-
   const handleDelete = async (id) => {
-    const confirm = window.confirm("¿Estás seguro de eliminar este proveedor?");
-    if (!confirm) return;
+    const result = await Swal.fire({
+      title: "¿Estás seguro?",
+      text: "No podrás revertir esto.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Sí, eliminar",
+      cancelButtonText: "Cancelar"
+    });
 
-    try {
-      const res = await fetch(`http://localhost:8092/api/proveedor/${id}`, {
-        method: "DELETE",
-      });
+    if (result.isConfirmed) {
+      try {
+        const res = await fetch(`http://localhost:8092/api/proveedor/${id}`, {
+          method: "DELETE",
+        });
 
-      if (res.ok) {
-        setProveedores(proveedores.filter((p) => p.id !== id));
-      } else {
-        console.error("Error al eliminar proveedor");
+        if (res.ok) {
+          Swal.fire("¡Eliminado!", "Proveedor eliminado correctamente.", "success");
+          setProveedores(proveedores.filter((p) => p.id !== id));
+        } else {
+          Swal.fire("Error", "No se pudo eliminar el proveedor.", "error");
+        }
+      } catch {
+        Swal.fire("Error", "Error al conectar con el servidor.", "error");
       }
-    } catch (err) {
-      console.error("Error en la solicitud DELETE:", err);
     }
   };
 
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [proveedorActual, setProveedorActual] = useState({ id: null, name: "", email: "", phone: "" });
+  const [proveedorActual, setProveedorActual] = useState({ id: null, name: "", lastname: "", email: "", phone: "" });
 
   const abrirModalEdicion = (proveedor) => {
     setProveedorActual(proveedor);
@@ -109,7 +132,7 @@ function Proveedores() {
 
   const cerrarModal = () => {
     setModalAbierto(false);
-    setProveedorActual({ id: null, name: "", email: "", phone: "" });
+    setProveedorActual({ id: null, name: "", lastname: "", email: "", phone: "" });
   };
 
   const handleEditChange = (e) => {
@@ -117,18 +140,32 @@ function Proveedores() {
   };
 
   const guardarCambios = () => {
-    fetch("http://localhost:8092/api/proveedor", {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(proveedorActual),
-    })
-      .then((res) => {
-        if (res.ok) {
-          getProveedores();
-          cerrarModal();
-        }
-      })
-      .catch((err) => console.error("Error al editar proveedor:", err));
+    Swal.fire({
+      title: "¿Estás seguro?",
+      text: "Vas a guardar los cambios.",
+      icon: "question",
+      showCancelButton: true,
+      confirmButtonText: "Sí, guardar",
+      cancelButtonText: "Cancelar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        fetch("http://localhost:8092/api/proveedor", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(proveedorActual),
+        })
+          .then((res) => {
+            if (res.ok) {
+              Swal.fire("¡Guardado!", "Proveedor actualizado correctamente.", "success");
+              getProveedores();
+              cerrarModal();
+            } else {
+              Swal.fire("Error", "No se pudo actualizar el proveedor.", "error");
+            }
+          })
+          .catch(() => Swal.fire("Error", "Error al conectar con el servidor.", "error"));
+      }
+    });
   };
 
   return (
@@ -180,7 +217,6 @@ function Proveedores() {
           />
         </div>
 
-
         {/* Tabla */}
         <div className="overflow-x-auto">
           <table className="min-w-full text-sm text-gray-800 border-separate border-spacing-y-2">
@@ -193,7 +229,6 @@ function Proveedores() {
                 <th className="text-center px-6 py-3 rounded-r-lg">Acciones</th>
               </tr>
             </thead>
-
             <tbody>
               {proveedores.map((prov) => (
                 <tr key={prov.id} className="bg-white shadow rounded-lg">
@@ -224,7 +259,6 @@ function Proveedores() {
                 </tr>
               ))}
             </tbody>
-
           </table>
         </div>
 
