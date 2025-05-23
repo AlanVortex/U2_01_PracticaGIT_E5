@@ -1,9 +1,14 @@
 import React from "react";
 
-export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSave }) {
+export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSave, proveedores }) {
   if (!isOpen || !auto) return null;
 
-  const camposCompletos = auto.brand.trim() && auto.model.trim();
+  const camposCompletos =
+    auto.brand.trim() &&
+    auto.model.trim() &&
+    auto.color.trim() &&
+    auto.plate.trim() &&
+    auto.providerId;
 
   return (
     <div className="fixed inset-0 bg-black/30 backdrop-blur-sm flex items-center justify-center z-50">
@@ -12,7 +17,6 @@ export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSav
 
         <input
           type="text"
-          name="brand"
           value={auto.brand}
           onChange={(e) => onChange({ ...auto, brand: e.target.value })}
           placeholder="Marca"
@@ -20,12 +24,37 @@ export default function EditarAutoModal({ isOpen, onClose, auto, onChange, onSav
         />
         <input
           type="text"
-          name="model"
           value={auto.model}
           onChange={(e) => onChange({ ...auto, model: e.target.value })}
           placeholder="Modelo"
-          className="w-full mb-4 p-2 border rounded"
+          className="w-full mb-3 p-2 border rounded"
         />
+        <input
+          type="text"
+          value={auto.color}
+          onChange={(e) => onChange({ ...auto, color: e.target.value })}
+          placeholder="Color"
+          className="w-full mb-3 p-2 border rounded"
+        />
+        <input
+          type="text"
+          value={auto.plate}
+          onChange={(e) => onChange({ ...auto, plate: e.target.value })}
+          placeholder="Placa"
+          className="w-full mb-3 p-2 border rounded"
+        />
+        <select
+          value={auto.providerId}
+          onChange={(e) => onChange({ ...auto, providerId: e.target.value })}
+          className="w-full mb-4 p-2 border rounded"
+        >
+          <option value="">Selecciona un proveedor</option>
+          {proveedores.map((prov) => (
+            <option key={prov.id} value={prov.id}>
+              {prov.name}
+            </option>
+          ))}
+        </select>
 
         <div className="flex justify-end space-x-2">
           <button
