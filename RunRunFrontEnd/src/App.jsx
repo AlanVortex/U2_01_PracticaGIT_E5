@@ -2,7 +2,8 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Autos from './pages/Automoviles.jsx';
 import Proveedores from './pages/Proveedores.jsx';
-import VerProveedor from './pages/VerProveedor.jsx'; // correcto
+import VerProveedor from './pages/VerProveedor.jsx';
+import VerAuto from './pages/VerAutomovil.jsx';
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
             <Route path="/proveedores" element={<Proveedores />} />
             <Route path="/proveedores/:id" element={<VerProveedor />} />
             <Route path="/automoviles" element={<Autos />} />
+            <Route path="/automoviles/:id" element={<VerAuto />} />
           </Routes>
         </div>
       </div>
