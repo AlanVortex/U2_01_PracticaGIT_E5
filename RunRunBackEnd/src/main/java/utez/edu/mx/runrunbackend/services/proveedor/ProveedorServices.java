@@ -32,6 +32,7 @@ public class ProveedorServices {
     public ProveedorEntity update(ProveedorEntity proveedorEntity) {
         ProveedorEntity proveedor = get(proveedorEntity.getId());
         proveedor.setName(proveedorEntity.getName());
+        proveedor.setLastName(proveedorEntity.getLastname());
         proveedor.setEmail(proveedorEntity.getEmail());
         proveedor.setPhone(proveedorEntity.getPhone());
         return proveedorRepository.save(proveedor);

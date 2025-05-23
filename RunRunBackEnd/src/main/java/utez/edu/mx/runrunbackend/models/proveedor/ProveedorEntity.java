@@ -13,6 +13,7 @@ public class ProveedorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String lastname;
     private String email;
     private String phone;
     @JsonIgnore
@@ -36,6 +37,14 @@ public class ProveedorEntity {
         return name;
     }
 
+    public void setLastName(String lastname) {
+        this.lastname = lastname;
+    }
+
+    public String getLastname() {
+        return lastname;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -52,8 +61,9 @@ public class ProveedorEntity {
         this.phone = phone;
     }
 
-    public ProveedorEntity(String name, Long id, String email, String phone) {
+    public ProveedorEntity( Long id, String name, String lastname, String email, String phone) {
         this.name = name;
+        this.lastname = lastname;
         this.id = id;
         this.email = email;
         this.phone = phone;

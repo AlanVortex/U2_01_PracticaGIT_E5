@@ -19,29 +19,51 @@ function VerProveedor() {
       });
   }, [id]);
 
-  if (loading) return <div className="p-6">Cargando proveedor...</div>;
-  if (!proveedor) return <div className="p-6">Proveedor no encontrado</div>;
+  if (loading) return <div className="p-6 text-gray-700">Cargando proveedor...</div>;
+  if (!proveedor) return <div className="p-6 text-red-600">Proveedor no encontrado</div>;
 
   return (
     <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-4xl mx-auto bg-white p-6 rounded shadow">
-        <h2 className="text-2xl font-semibold mb-4">Detalles del Proveedor</h2>
-        <p><strong>Nombre:</strong> {proveedor.name}</p>
-        <p><strong>Correo:</strong> {proveedor.email}</p>
-        <p><strong>Teléfono:</strong> {proveedor.phone}</p>
+      <div className="max-w-3xl mx-auto bg-white rounded-xl shadow-lg p-8 space-y-6">
+        <h2 className="text-3xl font-bold text-gray-800 border-b pb-4">Detalles del Proveedor</h2>
 
-        <h3 className="text-xl font-semibold mt-8 mb-2">Sus Automóviles</h3>
-        {proveedor.carEntityList?.length ? (
-          <ul className="list-disc pl-5">
-            {proveedor.carEntityList.map((car) => (
-              <li key={car.id}>
-                {car.brand} {car.model} - {car.plate}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-gray-500">Este proveedor no tiene automóviles registrados.</p>
-        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-gray-700">
+          <div>
+            <p className="text-sm text-gray-500">Nombre</p>
+            <p className="font-semibold text-lg">{proveedor.name}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Apellido</p>
+            <p className="font-semibold text-lg">{proveedor.lastname}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Correo</p>
+            <p className="font-medium">{proveedor.email}</p>
+          </div>
+          <div>
+            <p className="text-sm text-gray-500">Teléfono</p>
+            <p className="font-medium">{proveedor.phone}</p>
+          </div>
+        </div>
+
+        <div>
+          <h3 className="text-xl font-semibold text-gray-800 mt-8 mb-3">Automóviles Registrados</h3>
+          {proveedor.carEntityList?.length ? (
+            <ul className="space-y-2">
+              {proveedor.carEntityList.map((car) => (
+                <li
+                  key={car.id}
+                  className="bg-gray-50 border border-gray-200 p-3 rounded-lg shadow-sm"
+                >
+                  <span className="font-medium text-gray-700">{car.brand}</span> –{" "}
+                  <span className="font-semibold">{car.model}</span> ({car.plate})
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500 italic">Este proveedor no tiene automóviles registrados.</p>
+          )}
+        </div>
       </div>
     </div>
   );

@@ -6,6 +6,7 @@ function Proveedores() {
   const [proveedores, setProveedores] = useState([]);
   const [nuevoProveedor, setNuevoProveedor] = useState({
     name: "",
+    lastname: "",
     email: "",
     phone: ""
   });
@@ -26,10 +27,41 @@ function Proveedores() {
   };
 
   const handleSubmit = () => {
-    const { name, email, phone } = nuevoProveedor;
+    const { name, lastname, email, phone } = nuevoProveedor;
 
-    if (!name.trim() || !email.trim() || !phone.trim()) {
+    const nombreRegex = /^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/;
+    const correoRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const telefonoRegex = /^\d{10}$/;
+
+    if (!name.trim() || !lastname.trim() || !email.trim() || !phone.trim()) {
       alert("Todos los campos son obligatorios.");
+      return;
+    }
+
+    if (!nombreRegex.test(name) || !nombreRegex.test(lastname)) {
+      alert("Nombre y apellido solo deben contener letras.");
+      return;
+    }
+
+    if (!correoRegex.test(email)) {
+      alert("Correo electrónico no válido.");
+      return;
+    }
+
+    if (!telefonoRegex.test(phone)) {
+      alert("El teléfono debe contener exactamente 10 dígitos.");
+      return;
+    }
+
+    const duplicado = proveedores.some(
+      (p) =>
+        p.name === name &&
+        p.lastname === lastname &&
+        p.email === email
+    );
+
+    if (duplicado) {
+      alert("Ya existe un proveedor con ese nombre, apellido y correo.");
       return;
     }
 
@@ -40,12 +72,13 @@ function Proveedores() {
     })
       .then((res) => {
         if (res.ok) {
-          setNuevoProveedor({ name: "", email: "", phone: "" });
+          setNuevoProveedor({ name: "", lastname: "", email: "", phone: "" });
           getProveedores();
         }
       })
       .catch((err) => console.error("Error al crear proveedor:", err));
   };
+
 
   const handleDelete = async (id) => {
     const confirm = window.confirm("¿Estás seguro de eliminar este proveedor?");
@@ -112,14 +145,22 @@ function Proveedores() {
         </div>
 
         {/* Formulario */}
-        <div className="mb-6 grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="mb-6 grid grid-cols-2 md:grid-cols-4 gap-4">
           <input
             type="text"
             name="name"
             placeholder="Nombre"
             value={nuevoProveedor.name}
             onChange={handleChange}
-            className="p-2 border rounded"
+            className="px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
+          />
+          <input
+            type="text"
+            name="lastname"
+            placeholder="Apellido"
+            value={nuevoProveedor.lastname}
+            onChange={handleChange}
+            className="px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           <input
             type="email"
@@ -127,7 +168,7 @@ function Proveedores() {
             placeholder="Correo"
             value={nuevoProveedor.email}
             onChange={handleChange}
-            className="p-2 border rounded"
+            className="px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
           <input
             type="text"
@@ -135,9 +176,10 @@ function Proveedores() {
             placeholder="Teléfono"
             value={nuevoProveedor.phone}
             onChange={handleChange}
-            className="p-2 border rounded"
+            className="px-3 py-2 rounded-md border border-gray-300 shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
           />
         </div>
+
 
         {/* Tabla */}
         <div className="overflow-x-auto">
@@ -145,18 +187,18 @@ function Proveedores() {
             <thead>
               <tr className="bg-gray-100 text-gray-600">
                 <th className="text-left px-6 py-3 rounded-l-lg">Nombre</th>
+                <th className="text-left px-6 py-3">Apellido</th>
                 <th className="text-left px-6 py-3">Correo</th>
                 <th className="text-left px-6 py-3">Teléfono</th>
                 <th className="text-center px-6 py-3 rounded-r-lg">Acciones</th>
               </tr>
             </thead>
+
             <tbody>
               {proveedores.map((prov) => (
-                <tr
-                  key={prov.id}
-                  className="bg-white shadow rounded-lg"
-                >
+                <tr key={prov.id} className="bg-white shadow rounded-lg">
                   <td className="px-6 py-4 font-semibold">{prov.name}</td>
+                  <td className="px-6 py-4">{prov.lastname}</td>
                   <td className="px-6 py-4">{prov.email}</td>
                   <td className="px-6 py-4">{prov.phone}</td>
                   <td className="px-6 py-4 text-center space-x-2">
@@ -182,6 +224,7 @@ function Proveedores() {
                 </tr>
               ))}
             </tbody>
+
           </table>
         </div>
 
