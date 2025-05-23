@@ -1,4 +1,4 @@
-package utez.edu.mx.runrunbackend.models.brand;
+package utez.edu.mx.runrunbackend.models.proveedor;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -7,14 +7,14 @@ import utez.edu.mx.runrunbackend.models.car.CarEntity;
 import java.util.List;
 
 @Entity
-public class BrandEntity {
+public class ProveedorEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     @JsonIgnore
-    @OneToMany(mappedBy = "brand", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
     private List<CarEntity> carEntityList;
 
 
@@ -33,11 +33,11 @@ public class BrandEntity {
         return name;
     }
 
-    public BrandEntity(String name, Long id) {
+    public ProveedorEntity(String name, Long id) {
         this.name = name;
         this.id = id;
     }
-    public BrandEntity() {
+    public ProveedorEntity() {
     }
 
     public List<CarEntity> getCarEntityList() {

@@ -1,7 +1,7 @@
 package utez.edu.mx.runrunbackend.models.car;
 
 import jakarta.persistence.*;
-import utez.edu.mx.runrunbackend.models.brand.BrandEntity;
+import utez.edu.mx.runrunbackend.models.proveedor.ProveedorEntity;
 
 @Entity
 public class CarEntity {
@@ -10,16 +10,16 @@ public class CarEntity {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "brand_id")
-    private BrandEntity brand;
+    @JoinColumn(name = "proveedor_id")
+    private ProveedorEntity proveedor;
     private String model;
 
-    public BrandEntity getBrand() {
-        return brand;
+    public ProveedorEntity getProveedor() {
+        return proveedor;
     }
 
-    public void setBrand(BrandEntity brand) {
-        this.brand = brand;
+    public void setProveedor(ProveedorEntity proveedor) {
+        this.proveedor = proveedor;
     }
 
     public void setId(Long id) {
