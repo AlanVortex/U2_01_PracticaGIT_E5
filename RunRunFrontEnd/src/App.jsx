@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Autos from './pages/Automoviles.jsx';
-import Proveedores from './pages/Proveedores.jsx';
+import Proveedores from './pages/proveedores.jsx';
 import VerProveedor from './pages/VerProveedor.jsx';
 import VerAuto from './pages/VerAutomovil.jsx';
 
