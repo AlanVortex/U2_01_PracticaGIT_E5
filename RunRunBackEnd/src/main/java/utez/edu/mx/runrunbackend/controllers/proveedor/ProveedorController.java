@@ -10,7 +10,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/proveedor")
 @CrossOrigin("*")
-
 public class ProveedorController {
     private final ProveedorServices proveedorServices;
 
@@ -24,7 +23,7 @@ public class ProveedorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProveedorEntity> get(@PathVariable Long id) {
+    public ResponseEntity<ProveedorDto> get(@PathVariable Long id) {
         return ResponseEntity.ok(proveedorServices.get(id));
     }
 
@@ -42,5 +41,4 @@ public class ProveedorController {
     public ResponseEntity<String> delete(@PathVariable Long id) {
         return ResponseEntity.ok(proveedorServices.delete(id));
     }
-
 }

@@ -48,15 +48,15 @@ function VerProveedor() {
 
         <div>
           <h3 className="text-xl font-semibold text-gray-800 mt-8 mb-3">Automóviles Registrados</h3>
-          {proveedor.carEntityList?.length ? (
+          {proveedor.cars?.length ? (
             <ul className="space-y-2">
-              {proveedor.carEntityList.map((car) => (
+              {proveedor.cars.map((car) => (
                 <li
                   key={car.id}
                   className="bg-gray-50 border border-gray-200 p-3 rounded-lg shadow-sm"
                 >
                   <span className="font-medium text-gray-700">{car.brand}</span> –{" "}
-                  <span className="font-semibold">{car.model}</span> ({car.plate})
+                  <span className="font-semibold">{car.model}</span> ({car.plate.replace(/(\w{3})(\d{3})(\w)/, '$1-$2-$3')})
                 </li>
               ))}
             </ul>
@@ -64,6 +64,7 @@ function VerProveedor() {
             <p className="text-gray-500 italic">Este proveedor no tiene automóviles registrados.</p>
           )}
         </div>
+
       </div>
     </div>
   );
