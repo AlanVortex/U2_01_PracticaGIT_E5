@@ -22,16 +22,24 @@ public class ProveedorController {
     public ResponseEntity<List<ProveedorEntity>> get() {
         return ResponseEntity.ok(proveedorServices.all());
     }
+
     @GetMapping("/{id}")
     public ResponseEntity<ProveedorEntity> get(@PathVariable Long id) {
         return ResponseEntity.ok(proveedorServices.get(id));
     }
+
+    @PostMapping("")
+    public ResponseEntity<ProveedorEntity> create(@RequestBody ProveedorDto dto) {
+        return ResponseEntity.ok(proveedorServices.save(dto.toEntity()));
+    }
+
     @PutMapping("")
     public ResponseEntity<ProveedorEntity> update(@RequestBody ProveedorDto dto) {
         return ResponseEntity.ok(proveedorServices.update(dto.toEntity()));
     }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> update(@PathVariable Long id) {
+    public ResponseEntity<String> delete(@PathVariable Long id) {
         return ResponseEntity.ok(proveedorServices.delete(id));
     }
 

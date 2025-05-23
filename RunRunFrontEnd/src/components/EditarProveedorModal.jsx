@@ -3,7 +3,8 @@ import React from "react";
 function EditarProveedorModal({ isOpen, onClose, proveedor, onChange, onSave }) {
   if (!isOpen) return null;
 
-  const camposCompletos = proveedor.name.trim() && proveedor.email.trim() && proveedor.telephone.trim();
+  const camposCompletos =
+    proveedor.name?.trim() && proveedor.email?.trim() && proveedor.phone?.trim();
 
   return (
     <div className="fixed inset-0 bg-transparent bg-opacity-40 backdrop-blur-sm flex items-center justify-center z-50">
@@ -28,8 +29,8 @@ function EditarProveedorModal({ isOpen, onClose, proveedor, onChange, onSave }) 
         />
         <input
           type="text"
-          name="telephone"
-          value={proveedor.telephone}
+          name="phone"
+          value={proveedor.phone}
           onChange={onChange}
           placeholder="Teléfono"
           className="w-full mb-4 p-2 border rounded"

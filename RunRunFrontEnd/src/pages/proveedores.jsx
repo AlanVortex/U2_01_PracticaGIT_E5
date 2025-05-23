@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import EditarProveedorModal from "../components/EditarProveedorModal";
 
 function Proveedores() {
@@ -6,11 +7,11 @@ function Proveedores() {
   const [nuevoProveedor, setNuevoProveedor] = useState({
     name: "",
     email: "",
-    telephone: ""
+    phone: ""
   });
 
   const getProveedores = () => {
-    fetch("http://localhost:8080/api/proveedores")
+    fetch("http://localhost:8092/api/proveedor")
       .then((res) => res.json())
       .then((data) => setProveedores(data))
       .catch((error) => console.error("Error al cargar proveedores:", error));
@@ -25,34 +26,33 @@ function Proveedores() {
   };
 
   const handleSubmit = () => {
-    const { name, email, telephone } = nuevoProveedor;
+    const { name, email, phone } = nuevoProveedor;
 
-    if (!name.trim() || !email.trim() || !telephone.trim()) {
+    if (!name.trim() || !email.trim() || !phone.trim()) {
       alert("Todos los campos son obligatorios.");
       return;
     }
 
-    fetch("http://localhost:8080/api/proveedores", {
+    fetch("http://localhost:8092/api/proveedor", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(nuevoProveedor),
     })
       .then((res) => {
         if (res.ok) {
-          setNuevoProveedor({ name: "", email: "", telephone: "" });
+          setNuevoProveedor({ name: "", email: "", phone: "" });
           getProveedores();
         }
       })
       .catch((err) => console.error("Error al crear proveedor:", err));
   };
 
-
   const handleDelete = async (id) => {
     const confirm = window.confirm("¿Estás seguro de eliminar este proveedor?");
     if (!confirm) return;
 
     try {
-      const res = await fetch(`http://localhost:8080/api/proveedores/${id}`, {
+      const res = await fetch(`http://localhost:8092/api/proveedor/${id}`, {
         method: "DELETE",
       });
 
@@ -67,7 +67,7 @@ function Proveedores() {
   };
 
   const [modalAbierto, setModalAbierto] = useState(false);
-  const [proveedorActual, setProveedorActual] = useState({ id: null, name: "", email: "", telephone: "" });
+  const [proveedorActual, setProveedorActual] = useState({ id: null, name: "", email: "", phone: "" });
 
   const abrirModalEdicion = (proveedor) => {
     setProveedorActual(proveedor);
@@ -76,7 +76,7 @@ function Proveedores() {
 
   const cerrarModal = () => {
     setModalAbierto(false);
-    setProveedorActual({ id: null, name: "", email: "", telephone: "" });
+    setProveedorActual({ id: null, name: "", email: "", phone: "" });
   };
 
   const handleEditChange = (e) => {
@@ -84,7 +84,7 @@ function Proveedores() {
   };
 
   const guardarCambios = () => {
-    fetch(`http://localhost:8080/api/proveedores/${proveedorActual.id}`, {
+    fetch("http://localhost:8092/api/proveedor", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(proveedorActual),
@@ -97,8 +97,6 @@ function Proveedores() {
       })
       .catch((err) => console.error("Error al editar proveedor:", err));
   };
-
-
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-gray-100 w-full py-10 px-4">
@@ -133,53 +131,62 @@ function Proveedores() {
           />
           <input
             type="text"
-            name="telephone"
+            name="phone"
             placeholder="Teléfono"
-            value={nuevoProveedor.telephone}
+            value={nuevoProveedor.phone}
             onChange={handleChange}
             className="p-2 border rounded"
           />
         </div>
 
         {/* Tabla */}
-        <div className="overflow-x-auto bg-white rounded-xl shadow-md">
-          <table className="min-w-full">
+        <div className="overflow-x-auto">
+          <table className="min-w-full text-sm text-gray-800 border-separate border-spacing-y-2">
             <thead>
-              <tr>
-                <th className="px-4 py-3 text-left text-gray-600 font-normal">Nombre</th>
-                <th className="px-4 py-3 text-left text-gray-600 font-normal">Correo</th>
-                <th className="px-4 py-3 text-left text-gray-600 font-normal">Teléfono</th>
-                <th className="px-4 py-3 text-center text-gray-600 font-normal">Acciones</th>
+              <tr className="bg-gray-100 text-gray-600">
+                <th className="text-left px-6 py-3 rounded-l-lg">Nombre</th>
+                <th className="text-left px-6 py-3">Correo</th>
+                <th className="text-left px-6 py-3">Teléfono</th>
+                <th className="text-center px-6 py-3 rounded-r-lg">Acciones</th>
               </tr>
             </thead>
             <tbody>
               {proveedores.map((prov) => (
-                <tr key={prov.id} className="hover:bg-gray-50 transition">
-                  <td className="px-4 py-2 border-b">{prov.name}</td>
-                  <td className="px-4 py-2 border-b">{prov.email}</td>
-                  <td className="px-4 py-2 border-b">{prov.telephone}</td>
-                  <td className="px-4 py-2 border-b text-center">
+                <tr
+                  key={prov.id}
+                  className="bg-white shadow rounded-lg"
+                >
+                  <td className="px-6 py-4 font-semibold">{prov.name}</td>
+                  <td className="px-6 py-4">{prov.email}</td>
+                  <td className="px-6 py-4">{prov.phone}</td>
+                  <td className="px-6 py-4 text-center space-x-2">
+                    <Link
+                      to={`/proveedores/${prov.id}`}
+                      className="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-1 rounded shadow transition"
+                    >
+                      Ver
+                    </Link>
                     <button
                       onClick={() => abrirModalEdicion(prov)}
-                      className="bg-yellow-400 hover:bg-yellow-500 text-white py-1 px-4 rounded mr-2 transition"
+                      className="bg-yellow-400 hover:bg-yellow-500 text-white px-4 py-1 rounded shadow transition"
                     >
                       Editar
                     </button>
-
                     <button
                       onClick={() => handleDelete(prov.id)}
-                      className="bg-red-500 hover:bg-red-600 text-white py-1 px-4 rounded transition"
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-1 rounded shadow transition"
                     >
                       Borrar
                     </button>
-
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
         </div>
+
       </div>
+
       <EditarProveedorModal
         isOpen={modalAbierto}
         onClose={cerrarModal}
@@ -187,7 +194,6 @@ function Proveedores() {
         onChange={handleEditChange}
         onSave={guardarCambios}
       />
-
     </div>
   );
 }

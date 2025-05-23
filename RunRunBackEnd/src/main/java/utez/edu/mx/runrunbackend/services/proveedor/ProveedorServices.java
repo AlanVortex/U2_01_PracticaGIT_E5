@@ -11,24 +11,35 @@ import java.util.List;
 public class ProveedorServices {
 
     private final ProveedorRepository proveedorRepository;
+
     public ProveedorServices(ProveedorRepository proveedorRepository) {
         this.proveedorRepository = proveedorRepository;
     }
-    public List<ProveedorEntity> all (){
-        return proveedorRepository.findAll();
-    }
-    public ProveedorEntity get(Long id){
-        return proveedorRepository.findById(id) .orElseThrow(() -> new EntityNotFoundException("Proveedor not found"));
-    }
-    public ProveedorEntity update(ProveedorEntity brandEntity){
-        ProveedorEntity brand = get(brandEntity.getId());
-        brand.setName(brandEntity.getName());
-        return proveedorRepository.save(brand);
-    }
-    public String delete(Long id){
-        ProveedorEntity brand = get(id);
-        proveedorRepository.delete(brand);
-        return "Proveedor has been deleted";
+
+    public ProveedorEntity save(ProveedorEntity entity) {
+        return proveedorRepository.save(entity);
     }
 
+    public List<ProveedorEntity> all() {
+        return proveedorRepository.findAll();
+    }
+
+    public ProveedorEntity get(Long id) {
+        return proveedorRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Proveedor not found"));
+    }
+
+    public ProveedorEntity update(ProveedorEntity proveedorEntity) {
+        ProveedorEntity proveedor = get(proveedorEntity.getId());
+        proveedor.setName(proveedorEntity.getName());
+        proveedor.setEmail(proveedorEntity.getEmail());
+        proveedor.setPhone(proveedorEntity.getPhone());
+        return proveedorRepository.save(proveedor);
+    }
+
+    public String delete(Long id) {
+        ProveedorEntity proveedor = get(id);
+        proveedorRepository.delete(proveedor);
+        return "Proveedor has been deleted";
+    }
 }

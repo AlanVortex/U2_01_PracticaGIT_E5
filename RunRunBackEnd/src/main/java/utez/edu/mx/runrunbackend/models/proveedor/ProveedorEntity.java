@@ -13,8 +13,10 @@ public class ProveedorEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
+    private String email;
+    private String phone;
     @JsonIgnore
-    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, fetch = FetchType.LAZY,orphanRemoval = true)
+    @OneToMany(mappedBy = "proveedor", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<CarEntity> carEntityList;
 
 
@@ -25,18 +27,38 @@ public class ProveedorEntity {
     public Long getId() {
         return id;
     }
+
     public void setName(String name) {
         this.name = name;
-
     }
+
     public String getName() {
         return name;
     }
 
-    public ProveedorEntity(String name, Long id) {
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public ProveedorEntity(String name, Long id, String email, String phone) {
         this.name = name;
         this.id = id;
+        this.email = email;
+        this.phone = phone;
     }
+
     public ProveedorEntity() {
     }
 
