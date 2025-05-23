@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
-import Autos from './pages/autos.jsx';
-import Proveedores from './pages/proveedores.jsx';
+import Autos from './pages/Automoviles.jsx';
+import Proveedores from './pages/Proveedores.jsx';
 import VerProveedor from './pages/VerProveedor.jsx'; // correcto
 
 function App() {
@@ -12,7 +12,7 @@ function App() {
         <div className="p-4">
           <Routes>
             <Route path="/proveedores" element={<Proveedores />} />
-            <Route path="/proveedores/:id" element={<VerProveedor />} /> {/* sin comillas */}
+            <Route path="/proveedores/:id" element={<VerProveedor />} />
             <Route path="/automoviles" element={<Autos />} />
           </Routes>
         </div>
