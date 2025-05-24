@@ -15,11 +15,9 @@ import java.util.List;
 public class CarController {
 
     private final CarServices carServices;
-    private final ProveedorRepository proveedorRepository;
 
-    public CarController(CarServices carServices, ProveedorRepository proveedorRepository) {
+    public CarController(CarServices carServices) {
         this.carServices = carServices;
-        this.proveedorRepository = proveedorRepository;
     }
 
     @GetMapping("")
@@ -34,12 +32,12 @@ public class CarController {
 
     @PostMapping("")
     public ResponseEntity<CarEntity> create(@RequestBody CarDto dto) {
-        return ResponseEntity.ok(carServices.save(dto.toEntity(proveedorRepository)));
+        return ResponseEntity.ok(carServices.save(dto.toEntity() , dto.getIdProveedor()));
     }
 
     @PutMapping("")
     public ResponseEntity<CarEntity> update(@RequestBody CarDto dto) {
-        return ResponseEntity.ok(carServices.update(dto.toEntity(proveedorRepository)));
+        return ResponseEntity.ok(carServices.update(dto.toEntity() ,dto.getIdProveedor()));
     }
 
     @DeleteMapping("/{id}")

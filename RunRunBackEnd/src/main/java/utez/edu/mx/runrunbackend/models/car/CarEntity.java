@@ -9,8 +9,6 @@ public class CarEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    private String brand;
     private String model;
     private String color;
     private String plate;
@@ -27,14 +25,6 @@ public class CarEntity {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getBrand() {
-        return brand;
-    }
-
-    public void setBrand(String brand) {
-        this.brand = brand;
     }
 
     public String getModel() {
@@ -69,13 +59,18 @@ public class CarEntity {
         this.proveedor = proveedor;
     }
 
-    public CarEntity(Long id, String brand, String model, String color, String plate, ProveedorEntity proveedor) {
+    public CarEntity(Long id, String model, String color, String plate, ProveedorEntity proveedor) {
         this.id = id;
-        this.brand = brand;
         this.model = model;
         this.color = color;
         this.plate = plate;
         this.proveedor = proveedor;
+    }
+    public CarEntity(Long id, String model, String color, String plate) {
+        this.id = id;
+        this.model = model;
+        this.color = color;
+        this.plate = plate;
     }
 
     public CarEntity() {

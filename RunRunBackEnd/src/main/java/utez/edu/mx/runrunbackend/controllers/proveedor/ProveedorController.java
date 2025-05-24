@@ -23,7 +23,7 @@ public class ProveedorController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProveedorDto> get(@PathVariable Long id) {
+    public ResponseEntity<ProveedorEntity> get(@PathVariable Long id) {
         return ResponseEntity.ok(proveedorServices.get(id));
     }
 

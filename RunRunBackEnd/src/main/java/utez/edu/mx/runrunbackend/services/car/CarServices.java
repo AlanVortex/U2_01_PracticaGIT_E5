@@ -4,15 +4,19 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import utez.edu.mx.runrunbackend.models.car.CarEntity;
 import utez.edu.mx.runrunbackend.models.car.CarRepository;
+import utez.edu.mx.runrunbackend.models.proveedor.ProveedorEntity;
+import utez.edu.mx.runrunbackend.services.proveedor.ProveedorServices;
 
 import java.util.List;
 
 @Service
 public class CarServices {
     private final CarRepository carRepository;
+    private final ProveedorServices proveedorServices;
 
-    public CarServices(CarRepository carRepository) {
+    public CarServices(CarRepository carRepository, ProveedorServices proveedorServices) {
         this.carRepository = carRepository;
+        this.proveedorServices = proveedorServices;
     }
 
     public List<CarEntity> all() {
@@ -27,14 +31,19 @@ public class CarServices {
     public CarEntity save(CarEntity carEntity) {
         return carRepository.save(carEntity);
     }
+    public CarEntity save(CarEntity carEntity , Long idProveedor) {
+        ProveedorEntity proveedorEntity = proveedorServices.get(idProveedor);
+        carEntity.setProveedor(proveedorEntity);
+        return carRepository.save(carEntity);
+    }
 
-    public CarEntity update(CarEntity carEntity) {
+    public CarEntity update(CarEntity carEntity ,  Long idProveedor) {
         CarEntity car = get(carEntity.getId());
-        car.setBrand(carEntity.getBrand());
         car.setModel(carEntity.getModel());
         car.setColor(carEntity.getColor());
         car.setPlate(carEntity.getPlate());
-        car.setProveedor(carEntity.getProveedor());
+        ProveedorEntity proveedorEntity = proveedorServices.get(idProveedor);
+        car.setProveedor(proveedorEntity);
         return carRepository.save(car);
     }
 

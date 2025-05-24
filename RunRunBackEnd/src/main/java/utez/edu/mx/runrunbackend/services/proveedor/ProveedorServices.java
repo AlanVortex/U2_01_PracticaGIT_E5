@@ -19,11 +19,11 @@ public class ProveedorServices {
         return proveedorRepository.findAll();
     }
 
-    public ProveedorDto get(Long id) {
+    public ProveedorEntity get(Long id) {
         ProveedorEntity proveedor = proveedorRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Proveedor no encontrado con id: " + id));
 
-        return new ProveedorDto(proveedor); // 👈 usa el constructor DTO que incluye los autos
+        return proveedor ;// 👈 usa el constructor DTO que incluye los autos
     }
 
     public ProveedorEntity save(ProveedorEntity proveedor) {
